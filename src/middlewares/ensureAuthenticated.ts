@@ -27,6 +27,8 @@ export default function ensureAuthenticated(
     request.user = {
       id: sub,
     };
+
+    return next();
   } catch {
     throw Error('Invalid JWT token');
   }
