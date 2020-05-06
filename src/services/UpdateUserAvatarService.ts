@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 import User from '../models/User';
 
 import uploadConfig from '../config/upload';
+import AppError from '../errors/AppError';
 
 interface RequestDTO {
   avatarFilename: string;
@@ -16,7 +17,7 @@ class UpdateUserAvatarService {
     const user = await usersRepository.findOne(user_id);
 
     if (!user) {
-      throw Error('User does not exist');
+      throw new AppError('User does not exist', 401);
     }
 
     if (user.avatar) {

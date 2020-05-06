@@ -3,6 +3,8 @@ import { sign } from 'jsonwebtoken';
 import { compare } from 'bcryptjs';
 import User from '../models/User';
 
+import AppError from '../errors/AppError';
+
 import authConfig from '../config/auth';
 
 interface RequestDTO {
@@ -20,12 +22,12 @@ class CreateSessionService {
     const usersRepository = getRepository(User);
     const user = await usersRepository.findOne({ where: { email } });
     if (!user) {
-      throw Error('Invalid email and/or password');
+      throw new AppError('Invalid email and/or password', 401);
     }
 
     const verifyPassword = await compare(password, user.password);
     if (!verifyPassword) {
-      throw Error('Invalid email and/or password');
+      throw new AppError('Invalid email and/or password', 401);
     }
 
     const { secret, expiresIn } = authConfig.jwt;

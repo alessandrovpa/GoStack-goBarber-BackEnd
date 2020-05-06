@@ -2,6 +2,8 @@ import { startOfHour } from 'date-fns';
 import { getCustomRepository } from 'typeorm';
 import Appointment from '../models/Appointment';
 
+import AppError from '../errors/AppError';
+
 import AppointmentsRepository from '../repositories/AppointmentsRepository';
 
 interface RequestDTO {
@@ -20,7 +22,7 @@ class CreateAppointmentService {
       startHour,
     );
     if (verifyHourAvaiable) {
-      throw Error('Hour not avaiable');
+      throw new AppError('Hour not avaiable');
     }
 
     const appointment = appointmentsRepository.create({
